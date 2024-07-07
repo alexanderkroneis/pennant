@@ -14,7 +14,7 @@ use Laravel\Pennant\Events\FeatureResolved;
 use Laravel\Pennant\Events\FeaturesPurged;
 use Laravel\Pennant\Events\FeatureUpdated;
 use Laravel\Pennant\Events\FeatureUpdatedForAllScopes;
-use Laravel\Pennant\Events\ResolveFeature;
+use Laravel\Pennant\Events\ResolvingFeature;
 use Laravel\Pennant\Events\UnexpectedNullScopeEncountered;
 use Laravel\Pennant\Events\UnknownFeatureResolved;
 use Laravel\Pennant\Feature;
@@ -148,14 +148,14 @@ class ArrayDriverTest extends TestCase
 
     public function test_it_dispatches_events_when_resolving_feature_into_memory()
     {
-        Event::fake([ResolveFeature::class, FeatureResolved::class]);
+        Event::fake([ResolvingFeature::class, FeatureResolved::class]);
         Feature::define('foo', fn () => true);
 
         Feature::active('foo');
         Feature::active('foo');
 
-        Event::assertDispatchedTimes(ResolveFeature::class, 1);
-        Event::assertDispatched(function (ResolveFeature $event) {
+        Event::assertDispatchedTimes(ResolvingFeature::class, 1);
+        Event::assertDispatched(function (ResolvingFeature $event) {
             return $event->feature === 'foo' && $event->scope === null;
         });
 

@@ -20,8 +20,8 @@ use Laravel\Pennant\Events\FeatureRetrieved;
 use Laravel\Pennant\Events\FeaturesPurged;
 use Laravel\Pennant\Events\FeatureUpdated;
 use Laravel\Pennant\Events\FeatureUpdatedForAllScopes;
-use Laravel\Pennant\Events\ResolveFeature;
-use Laravel\Pennant\Events\RetrieveFeature;
+use Laravel\Pennant\Events\ResolvingFeature;
+use Laravel\Pennant\Events\RetrievingFeature;
 use Laravel\Pennant\Events\UnexpectedNullScopeEncountered;
 use Laravel\Pennant\Feature;
 use Laravel\Pennant\LazilyResolvedFeature;
@@ -133,7 +133,7 @@ class Decorator implements CanListStoredFeatures, Driver
                     : $instance(...));
             }
 
-            Event::dispatch(new ResolveFeature($feature, $scope));
+            Event::dispatch(new ResolvingFeature($feature, $scope));
 
             if (! $resolver instanceof Closure) {
                 return $this->resolve($feature, fn () => $resolver, $scope);
@@ -287,7 +287,7 @@ class Decorator implements CanListStoredFeatures, Driver
 
         $scope = $this->resolveScope($scope);
 
-        Event::dispatch(new RetrieveFeature($feature, $scope));
+        Event::dispatch(new RetrievingFeature($feature, $scope));
 
         $item = $this->cache
             ->whereStrict('scope', Feature::serializeScope($scope))

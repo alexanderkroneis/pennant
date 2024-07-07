@@ -4,7 +4,7 @@ namespace Laravel\Pennant\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class ResolveFeature
+class RetrievingFeature
 {
     use SerializesModels;
 
